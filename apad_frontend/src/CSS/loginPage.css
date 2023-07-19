@@ -1,0 +1,33 @@
+.splitScreen {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.leftPane{
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+}
+
+.rightPane {
+    width: 60%;
+}
+
+.leftImage {
+    height: inherit;
+    left: 0;
+    position: absolute;
+}
+
+.signupcontainer {
+    display: flex;
+    margin-top: 10px;
+}
+
+.newUserContainer {
+    margin-top: 21px;
+    width: 85px;
+}
