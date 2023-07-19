@@ -1,0 +1,30 @@
+.textInputContainer {
+    margin: 10px;
+}
+
+.buttonContainer {
+    margin-top: 10px;
+}
+
+.container {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 20px;
+    background-color: white;
+}
+
+.headingContainer {
+    display: flex;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.headingDividerContainer {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.contentContainer {
+    padding: 10px;
+}
