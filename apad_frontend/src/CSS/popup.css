@@ -1,0 +1,56 @@
+.popupBackground {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.crossIcon {
+    margin: 15px 22px;
+    height: 25px;
+    width: 25px;
+}
+
+.popup {
+    background-color: #FFF;
+    display: flex;
+    flex-direction: column;
+    height: max-content;
+    width: 50vh;
+    overflow: hidden;
+    border: 2px solid slategray;
+    border-radius: 10px;
+}
+
+.popupHeadingContainer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    font-weight: bolder;
+}
+
+.popupHeading {
+    margin: 15px 22px
+}
+.popupContent {
+    position: relative;
+    max-width: 640px;
+}
+.popupFooter {
+    padding: 5px 15px 15px 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.signUpContent {
+    padding: 5px 5px 5px 5px;
+}
+
+.signUpUserId {
+    padding-bottom: 10px;
+}

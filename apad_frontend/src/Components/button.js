@@ -18,6 +18,10 @@ const ButtonComponent = (props) => {
                 main: '#3F73DB',
                 contrastText: '#fff',
             },
+            gray: {
+                main: 'slategray',
+                contrastText: '#fff',
+            }
         },
     });
 
