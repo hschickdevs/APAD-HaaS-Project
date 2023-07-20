@@ -4,10 +4,12 @@ import TextInputComponent from "../Components/textInput";
 import ButtonComponent from "../Components/button";
 import image from "../media/loginImage.svg";
 import DialogComponent from "../Components/dialog";
+import { useDispatch } from "react-redux";
+import { setShowPopUp } from "../app/appSlice";
 
 
 const LoginPage = (props) => {
-
+    const dispatch = useDispatch();
     const [password, setPassword] = useState("");
     const [userId, setUserId] = useState("");
 
@@ -17,6 +19,10 @@ const LoginPage = (props) => {
         position: "fixed",
         top: "15%",
         right: "15%"
+    };
+
+    const signUpClick = () => {
+        dispatch(setShowPopUp("signup"));
     };
 
     const handlePassword = (e) => {
@@ -45,7 +51,7 @@ const LoginPage = (props) => {
                 <ButtonComponent variant="contained" id="loginButton" label="Next" size="large" colour="primary" containerStyle="right" onClick={loginClick} />
                 <div className="signupcontainer">
                     <p className="newUserContainer">New User? </p>
-                    <ButtonComponent className="signUpButton" variant="text" id="signUpButton" label="Sign Up" size="large" color="neutral" />
+                    <ButtonComponent className="signUpButton" variant="text" id="signUpButton" label="Sign Up" size="large" color="neutral" onClick={signUpClick} />
                 </div>
             </DialogComponent>
         );
@@ -53,7 +59,6 @@ const LoginPage = (props) => {
 
     return (
         <React.Fragment>
-
             <div className="splitScreen" >
                 <div className="leftPane" >
                     <div className="leftImage">
@@ -62,7 +67,6 @@ const LoginPage = (props) => {
                 </div>
                 <div className="rightPane" >{loginForm()}</div>
             </div>
-
         </React.Fragment>
     );
 };
