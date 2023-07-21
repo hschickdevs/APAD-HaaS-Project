@@ -4,7 +4,7 @@ Project files for our team project in the UT MSITM Advanced Programming &amp; Ap
 ## Latest Deployments:
 
 * **Frontend**: https://vercel.com/hschickdevs/apad-project-frontend
-    - URL: https://vercel.com/hschickdevs/apad-project-frontend/Ghz4mbFkBCemuoakhRNRky5BxAfu
+    - URL: https://apad-project-frontend.vercel.app
 * **Backend:** https://dashboard.heroku.com/apps/apad-project-backend
     - URL: https://apad-project-backend-22fdec946e0a.herokuapp.com/
 
