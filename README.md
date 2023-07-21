@@ -1,6 +1,13 @@
 # APAD-Team-Project
 Project files for our team project in the UT MSITM Advanced Programming &amp; App Development class
 
+## Latest Deployments:
+
+* **Frontend**: https://vercel.com/hschickdevs/apad-project-frontend
+    - URL: https://vercel.com/hschickdevs/apad-project-frontend/Ghz4mbFkBCemuoakhRNRky5BxAfu
+* **Backend:** https://dashboard.heroku.com/apps/apad-project-backend
+    - URL: https://apad-project-backend-22fdec946e0a.herokuapp.com/
+
 ## Backend Deployment Instructions:
 
 1. Create a new app on Heroku
