@@ -23,7 +23,7 @@ jwt = JWTManager(app)
 NECESSARY DOCUMENTATION:
 
 - With the implementation of jwt, requests to methods with @jwt_required( decorator must have an 
-  "Authorization" header with the access token specified
+  "Authorization: Bearer <YOUR_TOKEN>" header with the access token specified
 - Posts should specify "Content-Type: application/json" header as well
 
 ENVIRONMENT VARIABLES REQUIRED:
