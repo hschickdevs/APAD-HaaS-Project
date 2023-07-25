@@ -10,10 +10,10 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config['JWT_SECRET_KEY'] = getenv("FLASK_SECRET_KEY")
-app.config['MONGO_URI'] = getenv("MONGO_DB_URI")  # (e.g. 'mongodb://localhost:27017/myDatabase')
+app.config['JWT_SECRET_KEY'] = getenv("JWT_SECRET_KEY")
+# app.config['MONGO_URI'] = getenv("MONGO_DB_URI")
 
-mongo = PyMongo(app)
+# mongo = PyMongo(app)
 jwt = JWTManager(app)
 
 """
@@ -22,6 +22,10 @@ NECESSARY DOCUMENTATION:
 - With the implementation of jwt, requests to methods with @jwt_required decorator must have an 
   "Authorization" header with the access token specified
 - Posts should specify "Content-Type: application/json" header as well
+
+ENVIRONMENT VARIABLES REQUIRED:
+- JWT_SECRET_KEY
+- MONGO_DB_URI (e.g. 'mongodb://localhost:27017/myDatabase')
 """
 
 
