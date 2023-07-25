@@ -9,12 +9,11 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/')
 def home():
-    return "Hello! https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    return "Use the /api route to fetch data."
 
-@app.route('/api/get-test-data', methods=['GET'])
+@app.route('/api/test', methods=['GET'])
 def get_data():
-    data = {"name": "Harrison",
-            "opinion": "Python is EZ"}
+    data = {"name": "Harrison", "opinion": "Python is EZ"}
     return jsonify(data)
 
 @app.route('/api/post-test-data', methods=['POST'])
