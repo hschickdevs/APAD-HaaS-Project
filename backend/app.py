@@ -22,7 +22,7 @@ jwt = JWTManager(app)
 """
 NECESSARY DOCUMENTATION:
 
-- With the implementation of jwt, requests to methods with @jwt_required decorator must have an 
+- With the implementation of jwt, requests to methods with @jwt_required( decorator must have an 
   "Authorization" header with the access token specified
 - Posts should specify "Content-Type: application/json" header as well
 
@@ -76,7 +76,7 @@ def login():
 
 
 @app.route('/api/create_project', methods=['POST'])
-@jwt_required
+@jwt_required()
 def create_project():
     # Implement project creation logic here
     # ...
@@ -85,7 +85,7 @@ def create_project():
 
 
 @app.route('/api/access_project', methods=['GET'])
-@jwt_required
+@jwt_required()
 def access_project():
     project_id = request.json["project_id"]
 
@@ -97,14 +97,14 @@ def access_project():
 
 
 @app.route('/api/view_resources', methods=['GET'])
-@jwt_required
+@jwt_required()
 def view_resources():
     # Implement resource viewing logic here
     return "Viewing all resources", 200
 
 
 @app.route('/api/check_out_resource', methods=['POST'])
-@jwt_required
+@jwt_required()
 def request_resource():
     resource_id = request.json["resource_id"]
     project_id = request.json["project_id"]
@@ -117,7 +117,7 @@ def request_resource():
 
 
 @app.route('/api/check_in_resource', methods=['POST'])
-@jwt_required
+@jwt_required()
 def check_in_resource():
     resource_id = request.json["resource_id"]
     project_id = request.json["project_id"]
