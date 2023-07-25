@@ -27,6 +27,8 @@ Project files for our team project in the UT MSITM Advanced Programming &amp; Ap
 4. Next to **Config Vars**, click _Reveal Config Vars_ and add the following variable:
 
     * `PROJECT_PATH` = `backend`
+    * `JWT_SECRET_KEY` = `<RANDOM_SECRET_KEY_FOR_PWD_HASHING>`
+    * `MONGO_DB_URI` = `<MONGO_DB_ATLAS_URL>`
 
 5. Return to the **Deploy** tab 
 
