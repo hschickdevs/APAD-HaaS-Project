@@ -28,12 +28,15 @@ Project files for our team project in the UT MSITM Advanced Programming &amp; Ap
 
     * `PROJECT_PATH` = `backend`
 
-5. Return to the **Deploy** tab and click **Deploy Branch** under **Manual Deploy**
+5. Return to the **Deploy** tab 
+
+6. Click on **Enable Automatic Deploys** for CI/CD
+
+7. Click **Deploy Branch** under **Manual Deploy**
 
     * Make sure that the branch is `main`
 
-
-6. If the build succeeds, you can find the resulting URL next to **Settings** -> **Domains**
+8. If the build succeeds, you can find the resulting URL next to **Settings** -> **Domains**
 
 ## Frontend Deployment Instructions:
 
