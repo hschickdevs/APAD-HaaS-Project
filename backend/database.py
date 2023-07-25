@@ -1,10 +1,10 @@
 # Packages
 import pymongo
 from hashlib import md5 # Replace with the new package for encode / decode
+from os import getenv
 
 # Initializing
-client    = pymongo.MongoClient("mongodb://ianjenatz:Group6-Password@group6.4bbohko.mongodb.net/?retryWrites=true&w=majority")
-# client  = pymongo.MongoClient("mongodb+srv://ianjenatz:Group6-Password@group6.4bbohko.mongodb.net/?retryWrites=true&w=majority")
+client    = pymongo.MongoClient(getenv("MONGO_DB_URI"))
 database  = client["project-database"]
 
 users     = database.users

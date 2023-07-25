@@ -1,9 +1,12 @@
+from werkzeug.security import generate_password_hash, check_password_hash
+from os import getenv
+
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token
-from werkzeug.security import generate_password_hash, check_password_hash
-from os import getenv
+
+import database
 
 app = Flask(__name__)
 
@@ -13,7 +16,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['JWT_SECRET_KEY'] = getenv("JWT_SECRET_KEY")
 # app.config['MONGO_URI'] = getenv("MONGO_DB_URI")
 
-# mongo = PyMongo(app)
+# mongo = PyMongo(app)  <--- Using database.py instead
 jwt = JWTManager(app)
 
 """
@@ -43,6 +46,7 @@ def register():
     password = request.json.get('password', None)
     password_hash = generate_password_hash(password)
 
+    # Check if user already exists, and if not
     # Save the username and hashed password to the MongoDB database
     # ...
 
