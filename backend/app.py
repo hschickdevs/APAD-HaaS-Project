@@ -13,9 +13,7 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['JWT_SECRET_KEY'] = getenv("JWT_SECRET_KEY")
-# app.config['MONGO_URI'] = getenv("MONGO_DB_URI")
 
-# mongo = PyMongo(app)  <--- Using database.py instead
 jwt = JWTManager(app)
 
 """
@@ -65,7 +63,10 @@ def register():
 
     # Check if user already exists, and if not
     # Save the username and hashed password to the MongoDB database
-    # ...
+    try:
+        database.addUser(username, password_hash)
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
 
     return jsonify({"msg": "User registered successfully!", "username": username, "password": password}), 200
 
@@ -76,12 +77,11 @@ def login():
     password = request.json.get('password', None)
 
     # Fetch the user from your MongoDB database and verify their password
-    # This is just a placeholder logic:
-    user = {"username": "test", "password": generate_password_hash("test")}  # Replace this with the MongoDB query
-
+    # user = {"username": "test", "password": generate_password_hash("test")}  # This is just placeholder logic
     # Check for discrepancies (Can make these one response if security flaw)
-    if username != user["username"]:
-        return jsonify({"msg": "Bad username"}), 401
+    user = database.findUser(username)
+    if user is None:
+        return jsonify({"msg": "User not found"}), 401
     if not check_password_hash(user["password"], password):
         return jsonify({"msg": "Bad password"}), 401
 
@@ -96,7 +96,10 @@ def login():
 @jwt_required()
 def create_project():
     # Implement project creation logic here
-    # ...
+    try:
+        database.addProject(request.json["project_id"], request.json["username"], request.json["projectName"], request.json["projectDescription"])
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
 
     return "Project created successfully!", 200  # Should return new project ID and data
 
@@ -107,7 +110,12 @@ def access_project():
     project_id = request.json["project_id"]
 
     # Implement project access logic here
-    return f"Accessing project with id {project_id}", 200
+    try:
+        project = database.findProject(project_id)
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
+    
+    return jsonify(project), 200
 
 
 """ ------------------------ RESOURCE ROUTES ------------------------ """
