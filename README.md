@@ -1,5 +1,15 @@
-# APAD-Team-Project
-Project files for our team project in the UT MSITM Advanced Programming &amp; App Development class
+<div align="center">
+    <img src="https://infonetworks.com/wp-content/uploads/2023/01/hardware-as-a-service.png" style="border-radius: 50px;" width="200px">
+    <h1>APAD-HaaS-Project</h1>
+</div>
+
+This team project, in our Advanced Programming &amp; App Development (APAD) class at the University of Texas at Austin, involves the creation of a comprehensive Hardware-as-a-Service (HaaS) system featuring both a backend and frontend. 
+
+* The backend, a RESTful API, allows for account management, project creation and access, and resource viewing, requesting, and management. It is developed using Flask and MongoDB, with secure routes protected by JSON Web Tokens (JWT).
+
+* The frontend is built with React and styled with Material-UI. This frontend communicates with the backend API to provide users with an intuitive interface for managing their hardware resources.
+
+The combined system provides a robust platform (albiet abstract) for managing hardware resources in a shared environment, with a focus on security, usability, and efficiency.
 
 ## Latest Deployments:
 
