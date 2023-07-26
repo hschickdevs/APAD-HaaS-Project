@@ -3,6 +3,11 @@ import pymongo
 from hashlib import md5 # Replace with the new package for encode / decode
 from os import getenv
 
+# Import dotenv and try to load a file in the same directory as this file
+# Dotenv file only needs to be loaded in this file since it is the first file to be run and imported by app.py
+from dotenv import load_dotenv
+load_dotenv()
+
 # Initializing
 client    = pymongo.MongoClient(getenv("MONGO_DB_URI"))
 database  = client["project-database"]
@@ -20,13 +25,14 @@ def findUser(username):
     user = users.find_one({'username': username})
     return user
 
-def addUser(username, password):
+def addUser(username, password_hash):
     user_dict = {
         "username": username,
-        "password": md5(password.encode('utf-8')).hexdigest()
+        # "password": md5(password.encode('utf-8')).hexdigest()
+        "password": password_hash
     }
     if findUser(username) != None:
-        raise ValueError("Username already exists")
+        raise ValueError(f"Username {username} already exists")
     
     users.insert_one(user_dict)
     return user_dict
@@ -45,7 +51,7 @@ def addProject(project_id, username, projectName, projectDescription):
         "projectDescription": projectDescription
     }
     if findProject(project_id) != None:
-        raise ValueError("Project ID already exists")
+        raise ValueError(f"Project ID {project_id} already exists")
         
     projects.insert_one(project_dict)
     return project_dict
@@ -63,7 +69,7 @@ def addResource(checkedOut_id, project_id, hardware_id, checkedOut):
         "checkedOut": checkedOut
     }
     if findResource(checkedOut_id) != None:
-        raise ValueError("Resource ID already exists")
+        raise ValueError(f"Resource ID {checkedOut_id} already exists")
     
     resources.insert_one(resource_dict)
     return resource_dict
@@ -79,7 +85,7 @@ def addHardware(hardware_id, maxAmount, availableAmount):
         "availableAmount": availableAmount
     }
     if findHardware(hardware_id) != None:
-        raise ValueError("Hardware ID already exists")
+        raise ValueError(f"Hardware ID {hardware_id} already exists")
     
     hardwares.insert_one(hardware_dict)
     return hardware_dict
