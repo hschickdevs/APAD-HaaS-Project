@@ -62,6 +62,9 @@ def addResource(checkedOut_id, project_id, hardware_id, checkedOut):
         "hardware_id": hardware_id,
         "checkedOut": checkedOut
     }
+    if findResource(checkedOut_id) != None:
+        raise ValueError("Resource ID already exists")
+    
     resources.insert_one(resource_dict)
     return resource_dict
 
@@ -75,6 +78,9 @@ def addHardware(hardware_id, maxAmount, availableAmount):
         "maxAmount": maxAmount,
         "availableAmount": availableAmount
     }
+    if findHardware(hardware_id) != None:
+        raise ValueError("Hardware ID already exists")
+    
     hardwares.insert_one(hardware_dict)
     return hardware_dict
 
