@@ -9,7 +9,7 @@ This team project, in our Advanced Programming &amp; App Development (APAD) clas
 
 * The frontend is built with React and styled with Material-UI. This frontend communicates with the backend API to provide users with an intuitive interface for managing their hardware resources.
 
-The combined system provides a robust platform (albiet abstract) for managing hardware resources in a shared environment, with a focus on security, usability, and efficiency.
+The combined system provides a robust platform for managing theoretical hardware resources in a shared environment, with a focus on security, usability, and efficiency.
 
 ## Latest Deployments:
 
