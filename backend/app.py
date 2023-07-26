@@ -29,6 +29,11 @@ NECESSARY DOCUMENTATION:
 ENVIRONMENT VARIABLES REQUIRED:
 - JWT_SECRET_KEY
 - MONGO_DB_URI (e.g. 'mongodb://localhost:27017/myDatabase')
+
+ERROR CODES:
+- 401: Bad Credentials/Unauthorized
+- 400: Bad Request
+- 200: Success
 """
 
 
@@ -50,7 +55,7 @@ def register():
     # Save the username and hashed password to the MongoDB database
     # ...
 
-    return jsonify({"msg": "User registered successfully!", "username": username, "password": password}), 201
+    return jsonify({"msg": "User registered successfully!", "username": username, "password": password}), 200
 
 
 @app.route('/api/login', methods=['POST'])

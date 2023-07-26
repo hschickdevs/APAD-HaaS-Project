@@ -10,10 +10,10 @@ database  = client["project-database"]
 users     = database.users
 projects  = database.projects
 resources = database.resources
-hardwares = database.hardwares 
+hardwares = database.hardwares
 
 ### HARDWARES NEEDS TO BE INITIALIZED WITH HARDCODED VALUES ALREADY ###
-print("yep")
+print(f"Database Initialized - Connected to databases: {', '.join(list(client.list_database_names()))}")
 
 # USERS DATABASE METHODS -----------------------------------------------------------
 def findUser(username):
@@ -25,13 +25,17 @@ def addUser(username, password):
         "username": username,
         "password": md5(password.encode('utf-8')).hexdigest()
     }
+    if findUser(username) != None:
+        raise ValueError("Username already exists")
+    
     users.insert_one(user_dict)
+    return user_dict
 
 
 
 # PROJECTS DATABASE METHODS ---------------------------------------------------------
 def findProject(project_id):
-    projects.find_one({'project_id': project_id})
+    return projects.find_one({'project_id': project_id})
 
 def addProject(project_id, username, projectName, projectDescription):
     project_dict = {
@@ -40,11 +44,16 @@ def addProject(project_id, username, projectName, projectDescription):
         "projectName": projectName,
         "projectDescription": projectDescription
     }
+    if findProject(project_id) != None:
+        raise ValueError("Project ID already exists")
+        
     projects.insert_one(project_dict)
+    return project_dict
 
 # RESOURCES DATABASE METHODS ---------------------------------------------------------
 def findResource(checkedOut_id):
-    projects.find_one({'checkedOut_id': checkedOut_id})
+    return resources.find_one({'checkedOut_id': checkedOut_id})
+    
 
 def addResource(checkedOut_id, project_id, hardware_id, checkedOut):
     resource_dict = {
@@ -53,11 +62,12 @@ def addResource(checkedOut_id, project_id, hardware_id, checkedOut):
         "hardware_id": hardware_id,
         "checkedOut": checkedOut
     }
-    projects.insert_one(resource_dict)
+    resources.insert_one(resource_dict)
+    return resource_dict
 
 # HARDWARES DATABASE METHODS --------------------------------------------------------
 def findHardware(hardware_id):
-    hardwares.find_one({'hardware_id': hardware_id})
+    return hardwares.find_one({'hardware_id': hardware_id})
 
 def addHardware(hardware_id, maxAmount, availableAmount):
     hardware_dict = {
@@ -66,6 +76,7 @@ def addHardware(hardware_id, maxAmount, availableAmount):
         "availableAmount": availableAmount
     }
     hardwares.insert_one(hardware_dict)
+    return hardware_dict
 
 
 
