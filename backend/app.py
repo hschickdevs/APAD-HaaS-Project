@@ -39,7 +39,20 @@ ERROR CODES:
 
 @app.route('/')
 def home():
-    return "Welcome to the HaaS system!"
+    return jsonify({
+        "name": "Hardware-as-a-Service System API",
+        "version": "MVP",
+        "description": "This API allows users to manage accounts, projects, and resources in the HaaS system.",
+        "routes": {
+            "/api/register": "POST: Register a new user",
+            "/api/login": "POST: Login and receive a JWT token",
+            "/api/create_project": "POST: Create a new project (requires JWT token)",
+            "/api/access_project": "GET: Access a specific project (requires JWT token)",
+            "/api/view_resources": "GET: View all available resources (requires JWT token)",
+            "/api/check_out_resource": "POST: Check out a resource (requires JWT token)",
+            "/api/check_in_resource": "POST: Check in a resource (requires JWT token)"
+        }})
+
 
 
 """ ------------------------ AUTHORIZATION ROUTES ------------------------ """
