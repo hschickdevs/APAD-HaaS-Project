@@ -1,0 +1,19 @@
+.hardwareContainer{
+    background-color: aliceblue;
+    height: 100vh;
+}
+
+.hardwareHeader{
+    display: flex;
+    padding: 20px;
+}
+
+.hardwareContent{
+    padding: 0px 30px;
+}
+
+.hardwareFooter{
+    padding: 0px 30px;
+    display: flex;
+    justify-content: space-between;
+}
