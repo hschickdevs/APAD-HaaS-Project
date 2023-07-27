@@ -68,7 +68,7 @@ def register():
     except Exception as err:
         return jsonify({"msg": f"Error: {err}"}), 400
 
-    return jsonify({"msg": "User registered successfully!", "username": username, "password": password}), 200
+    return jsonify({"msg": "User registered successfully!", "user": {"username": username, "password": password}}), 200
 
 
 @app.route('/api/login', methods=['POST'])
