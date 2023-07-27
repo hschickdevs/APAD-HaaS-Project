@@ -1,3 +1,7 @@
-flask
-flask_cors
-gunicorn
+flask==2.3.2
+flask_cors==4.0.0
+flask_jwt_extended==4.5.2
+werkzeug==2.3.6
+gunicorn==20.0.4
+pymongo==4.4.1
+python-dotenv==1.0.0

@@ -1,5 +1,15 @@
-# APAD-Team-Project
-Project files for our team project in the UT MSITM Advanced Programming &amp; App Development class
+<div align="center">
+    <img src="https://infonetworks.com/wp-content/uploads/2023/01/hardware-as-a-service.png" style="border-radius: 50px;" width="200px">
+    <h1>APAD-HaaS-Project</h1>
+</div>
+
+This team project, in our Advanced Programming &amp; App Development (APAD) class at the University of Texas at Austin, involves the creation of a comprehensive Hardware-as-a-Service (HaaS) system featuring both a backend and frontend. 
+
+* The backend, a RESTful API, allows for account management, project creation and access, and resource viewing, requesting, and management. It is developed using Flask and MongoDB, with secure routes protected by JSON Web Tokens (JWT).
+
+* The frontend is built with React and styled with Material-UI. This frontend communicates with the backend API to provide users with an intuitive interface for managing their hardware resources.
+
+The combined system provides a robust platform for managing theoretical hardware resources in a shared environment, with a focus on security, usability, and efficiency.
 
 ## Latest Deployments:
 
@@ -27,13 +37,18 @@ Project files for our team project in the UT MSITM Advanced Programming &amp; Ap
 4. Next to **Config Vars**, click _Reveal Config Vars_ and add the following variable:
 
     * `PROJECT_PATH` = `backend`
+    * `JWT_SECRET_KEY` = `<RANDOM_SECRET_KEY_FOR_PWD_HASHING>`
+    * `MONGO_DB_URI` = `<MONGO_DB_ATLAS_URL>`
 
-5. Return to the **Deploy** tab and click **Deploy Branch** under **Manual Deploy**
+5. Return to the **Deploy** tab 
+
+6. Click on **Enable Automatic Deploys** for CI/CD
+
+7. Click **Deploy Branch** under **Manual Deploy**
 
     * Make sure that the branch is `main`
 
-
-6. If the build succeeds, you can find the resulting URL next to **Settings** -> **Domains**
+8. If the build succeeds, you can find the resulting URL next to **Settings** -> **Domains**
 
 ## Frontend Deployment Instructions:
 
