@@ -101,7 +101,7 @@ def create_project():
     except Exception as err:
         return jsonify({"msg": f"Error: {err}"}), 400
 
-    return "Project created successfully!", 200  # Should return new project ID and data
+    return jsonify({"msg": "Project created successfully!"}), 200  # Should return new project ID and data
 
 
 @app.route('/api/access_project', methods=['GET'])
