@@ -9,6 +9,11 @@ const DialogComponent = (props) => {
                 fontSize: "30px",
                 fontWeight: "bolder"
             }
+        } else if (type === "createProject" || "existingProject") {
+            style = {
+                fontSize: "25px",
+                fontWeight: "bolder"
+            }
         }
         return style;
     }

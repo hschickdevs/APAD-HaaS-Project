@@ -11,6 +11,7 @@
     border-radius: 10px;
     padding: 5px;
     margin: 20px;
+    min-width: fit-content;
     background-color: white;
 }
 

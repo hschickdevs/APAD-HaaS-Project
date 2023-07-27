@@ -1,0 +1,12 @@
+.projectContainer{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 100px;
+    height: 100vh;
+    background-color: aliceblue;
+}
+
+.projectDialog {
+    min-width: 50%;
+}
