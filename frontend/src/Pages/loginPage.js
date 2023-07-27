@@ -6,7 +6,7 @@ import image from "../media/loginImage.svg";
 import DialogComponent from "../Components/dialog";
 import { useDispatch } from "react-redux";
 import { setShowPopUp } from "../app/appSlice";
-
+import { getLogin } from "../app/API";
 
 const LoginPage = (props) => {
     const dispatch = useDispatch();
@@ -35,11 +35,13 @@ const LoginPage = (props) => {
 
     const loginClick = () => {
         const request = {
-            userId: userId,
+            username: userId,
             password: password
         }
-        console.log("req", request)
-    }
+        getLogin(request, dispatch);
+
+    };
+
     const loginForm = () => {
         return (
             <DialogComponent style={style}

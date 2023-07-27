@@ -6,15 +6,20 @@ export const userSlice = createSlice({
         userId: "",
         password: "",
         loginSuccess: false,
-        error: ""
+        projectId: "",
+        error: "",
     },
     reducers: {
         setUserId: (state, action) => {
             state.userId = action.payload
         },
 
-        setLoginSuccess: (state) => {
-            state.loginSuccess = true
+        setProjectId: (state, action) => {
+            state.projectId = action.payload
+        },
+
+        setLoginSuccess: (state, action) => {
+            state.loginSuccess = action.payload
         },
 
         setPassword: (state, action) => {
@@ -27,6 +32,6 @@ export const userSlice = createSlice({
     },
 })
 
-export const { setUserId, setLoginSuccess } = userSlice.actions
+export const { setUserId, setLoginSuccess, setProjectId, setPassword, setError } = userSlice.actions
 
 export default userSlice.reducer

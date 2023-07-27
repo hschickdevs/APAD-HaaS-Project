@@ -19,8 +19,16 @@ const ButtonComponent = (props) => {
                 contrastText: '#fff',
             },
             gray: {
-                main: 'slategray',
+                main: '#708090',
                 contrastText: '#fff',
+            },
+            createProject: {
+                main: "#3c74dc",
+                contrastText: '#fff',
+            },
+            existingProject: {
+                main: "#7599e5",
+                contrastText: '#fff'
             }
         },
     });
@@ -31,6 +39,12 @@ const ButtonComponent = (props) => {
             style = {
                 display: "flex",
                 marginTop: "25px",
+                justifyContent: "right"
+            }
+        } else if (type === "logout") {
+            style = {
+                display: "flex",
+                marginRight: "5px",
                 justifyContent: "right"
             }
         }
