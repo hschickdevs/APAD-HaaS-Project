@@ -1,11 +1,9 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from os import getenv
-import json
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token
-from bson import json_util
 
 import database
 
@@ -65,7 +63,7 @@ def register():
     # Check if user already exists, and if not
     # Save the username and hashed password to the MongoDB database
     try:
-        user = database.addUser(username, password_hash)
+        database.addUser(username, password_hash)
     except Exception as err:
         return jsonify({"msg": f"Error: {err}"}), 400
 
@@ -96,8 +94,6 @@ def login():
 @app.route('/api/create_project', methods=['POST'])
 @jwt_required()
 def create_project():
-    # DOCUMENT FUNCTION HERE ...
-
     try:
         database.addProject(request.json["project_id"], request.json["username"],
                             request.json["projectName"], request.json["projectDescription"])
@@ -108,19 +104,17 @@ def create_project():
     return jsonify({"msg": "Project created successfully!"}), 200
 
 
-@app.route('/api/access_project', methods=['GET'])
+@app.route('/api/access_project', methods=['POST'])
 @jwt_required()
 def access_project():
-    # DOCUMENT FUNCTION HERE ...
-
-    project_id = request.json["project_id"]
+    project_id = request.json.get("project_id", None)
 
     try:
         project = database.findProject(project_id)
     except Exception as err:
         return jsonify({"msg": f"Error: {err}"}), 400
 
-    return jsonify({"msg": "Successfully accessed project!", "project": json.loads(json_util.dumps(project))}), 200
+    return jsonify(project), 200
 
 
 """ ------------------------ RESOURCE ROUTES ------------------------ """
