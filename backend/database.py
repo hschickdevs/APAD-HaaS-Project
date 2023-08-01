@@ -1,38 +1,31 @@
 # Packages
 import pymongo
-from hashlib import md5  # Replace with the new package for encode / decode
 from os import getenv
-
-# Import dotenv and try to load a file in the same directory as this file
-# Dotenv file only needs to be loaded in this file since it is the first file to be run and imported by app.py
 from dotenv import load_dotenv
+# Import dotenv and try to load a file in the same directory as this file
+
+# Dotenv file only needs to be loaded in this file since it is the first file to be run and imported by app.py
 load_dotenv()
 
 # Initializing
-client = pymongo.MongoClient(getenv("MONGO_DB_URI"))
-database = client["project-database"]
+client    = pymongo.MongoClient(getenv("MONGO_DB_URI"))
+database  = client["project-database"]
 
-users = database.users
-projects = database.projects
+users     = database.users
+projects  = database.projects
 resources = database.resources
 hardwares = database.hardwares
 
 ### HARDWARES NEEDS TO BE INITIALIZED WITH HARDCODED VALUES ALREADY ###
-print(
-    f"Database Initialized - Connected to databases: {', '.join(list(client.list_database_names()))}")
+print(f"Database Initialized - Connected to databases: {', '.join(list(client.list_database_names()))}")
 
 # USERS DATABASE METHODS -----------------------------------------------------------
-
-
 def findUser(username):
-    user = users.find_one({'username': username})
-    return user
-
+    return users.find_one({'username': username}, {'_id': False})
 
 def addUser(username, password_hash):
     user_dict = {
         "username": username,
-        # "password": md5(password.encode('utf-8')).hexdigest()
         "password": password_hash
     }
     if findUser(username) != None:
@@ -44,8 +37,7 @@ def addUser(username, password_hash):
 
 # PROJECTS DATABASE METHODS ---------------------------------------------------------
 def findProject(project_id):
-    return projects.find_one({'project_id': project_id})
-
+    return projects.find_one({'project_id': project_id}, {'_id': False})
 
 def addProject(project_id, username, projectName, projectDescription):
     project_dict = {
@@ -60,13 +52,19 @@ def addProject(project_id, username, projectName, projectDescription):
     projects.insert_one(project_dict)
     return project_dict
 
+
 # RESOURCES DATABASE METHODS ---------------------------------------------------------
-
-
 def findResource(checkedOut_id):
-    """FIND RESOURCE"""
-    return resources.find_one({'checkedOut_id': checkedOut_id})
+    return resources.find_one({'checkedOut_id': checkedOut_id}, {'_id': False})
 
+def upsertResource(project_id, hardware_id, checkedOut):
+    resource_dict = {
+        "project_id": project_id,
+        "hardware_id": hardware_id,
+        "checkedOut": checkedOut
+    }
+    resources.update_one({"project_id": project_id, "hardware_id": hardware_id}, {"$set": resource_dict}, upsert=True)
+    return resource_dict
 
 def addResource(checkedOut_id, project_id, hardware_id, checkedOut):
     resource_dict = {
@@ -77,13 +75,12 @@ def addResource(checkedOut_id, project_id, hardware_id, checkedOut):
     }
     if findResource(checkedOut_id) != None:
         raise ValueError(f"Resource ID {checkedOut_id} already exists")
-
+    
     resources.insert_one(resource_dict)
     return resource_dict
 
+
 # HARDWARES DATABASE METHODS --------------------------------------------------------
-
-
 def findHardware(hardware_id):
     return hardwares.find_one({'hardware_id': hardware_id})
 
