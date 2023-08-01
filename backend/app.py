@@ -120,26 +120,64 @@ def access_project():
 """ ------------------------ RESOURCE ROUTES ------------------------ """
 
 
-@app.route('/api/view_resources', methods=['GET'])
+@app.route('/api/view_resources', methods=['POST'])
 @jwt_required()
 def view_resources():
-    # UNFINISHED FUNCTION - DOCUMENT AND CODE
-    # ...
+    project_id = request.json.get('project_id', None)
 
-    return "Viewing all resources", 200
+    try:
+        projectResources = database.findProjectResources(project_id)
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
+
+    return jsonify(projectResources), 200
 
 
 @app.route('/api/check_out_resource', methods=['POST'])
 @jwt_required()
 def request_resource():
-    resource_id = request.json["resource_id"]
-    project_id = request.json["project_id"]
-    quantity = request.json["quantity"]
+    '''
+        Frontend has to send in format:
+        {
+            "hardware1": {
+                "hardware_id": "hardware 1 Name or value",
+                "project_id": "1234",
+                "quantity": 1
+            },
+            "hardware2": {
+                "hardware_id": "hardware 2 Name or value",
+                "project_id": "1234",
+                "quantity": 2
+            }
+        }
+    '''
 
     # Implement resource request logic here with MongoDB
     # ...
+    for hardwareSet in request.json.values():
+        hardware_id = hardwareSet["hardware_id"]
+        project_id = hardwareSet["project_id"]
 
-    return f"{quantity} of resource {resource_id} checked out successfully!", 200
+        try:
+            projectResources = database.findProjectResources(project_id)
+
+            for resource in projectResources:
+                if resource["hardware_id"] == hardware_id:
+                    quantity = resource["checkedOut"] + hardwareSet["quantity"]
+                    break
+                else:
+                    quantity = hardwareSet["quantity"]
+        except:
+            quantity = hardwareSet["quantity"]
+
+        database.upsertResource(project_id, hardware_id, quantity)
+
+        # Update Availability of Hardware
+        hardware = database.findHardware(hardware_id)
+        newAvailable = hardware["availableAmount"] - hardwareSet["quantity"]
+        database.updateHardware(hardware_id, newAvailable)
+
+    return f"Hardware checked out successfully!", 200
 
 
 @app.route('/api/check_in_resource', methods=['POST'])
