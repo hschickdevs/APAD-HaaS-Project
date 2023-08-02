@@ -57,6 +57,12 @@ def addProject(project_id, username, projectName, projectDescription):
 def findResource(checkedOut_id):
     return resources.find_one({'checkedOut_id': checkedOut_id}, {'_id': False})
 
+def findProjectResources(project_id):
+    allResources = list(resources.find({"project_id": project_id}, {'_id': False}))
+    if len(allResources) == 0:
+        raise ValueError("No resources found")
+    return allResources
+
 def upsertResource(project_id, hardware_id, checkedOut):
     resource_dict = {
         "project_id": project_id,
@@ -82,8 +88,7 @@ def addResource(checkedOut_id, project_id, hardware_id, checkedOut):
 
 # HARDWARES DATABASE METHODS --------------------------------------------------------
 def findHardware(hardware_id):
-    return hardwares.find_one({'hardware_id': hardware_id})
-
+    return hardwares.find_one({'hardware_id': hardware_id}, {'_id': False})
 
 def addHardware(hardware_id, maxAmount, availableAmount):
     hardware_dict = {
@@ -93,9 +98,25 @@ def addHardware(hardware_id, maxAmount, availableAmount):
     }
     if findHardware(hardware_id) != None:
         raise ValueError(f"Hardware ID {hardware_id} already exists")
-
+    
     hardwares.insert_one(hardware_dict)
     return hardware_dict
+
+def findAllHardware():
+    allHardware = list(hardwares.find({}, {'_id': False}))
+    if len(allHardware) == 0:
+        raise ValueError("No hardware found")
+    return allHardware
+
+def updateHardware(hardware_id, availableAmount):
+    hardware_dict = {
+        "hardware_id": hardware_id,
+        "availableAmount": availableAmount
+    }
+    hardwares.update_one({"hardware_id": hardware_id}, {"$set": {"availableAmount": availableAmount}})
+    return hardware_dict
+
+
 
 
 # ---------------------------------------------- TESTS ----------------------------------------------------------
