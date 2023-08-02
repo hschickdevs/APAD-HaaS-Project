@@ -175,7 +175,7 @@ def request_resource():
         newAvailable = hardware["availableAmount"] - hardwareSet["quantity"]
         database.updateHardware(hardware_id, newAvailable)
 
-    return f"Hardware checked out successfully!", 200
+    return jsonify({f"Hardware checked out successfully!"}), 200
 
 
 @app.route('/api/check_in_resource', methods=['POST'])
@@ -223,7 +223,7 @@ def check_in_resource():
         newAvailable = hardware["availableAmount"] + hardwareSet["quantity"]
         database.updateHardware(hardware_id, newAvailable)
 
-    return f"Hardware checked in successfully!", 200
+    return jsonify({f"Hardware checked in successfully!"}), 200
 
 
 """ ------------------------ HARDWARE ROUTES ------------------------ """
