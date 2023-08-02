@@ -152,8 +152,6 @@ def request_resource():
         }
     '''
 
-    # Implement resource request logic here with MongoDB
-    # ...
     for hardwareSet in request.json.values():
         hardware_id = hardwareSet["hardware_id"]
         project_id = hardwareSet["project_id"]
@@ -183,14 +181,63 @@ def request_resource():
 @app.route('/api/check_in_resource', methods=['POST'])
 @jwt_required()
 def check_in_resource():
-    resource_id = request.json["resource_id"]
-    project_id = request.json["project_id"]
-    quantity = request.json["quantity"]
+    '''
+        Frontend has to send in format:
+        {
+            "hardware1": {
+                "hardware_id": "hardware 1 Name or value",
+                "project_id": "1234",
+                "quantity": 1
+            },
+            "hardware2": {
+                "hardware_id": "hardware 2 Name or value",
+                "project_id": "1234",
+                "quantity": 2
+            }
+        }
+    '''
 
-    # Implement resource check-in logic here with MongoDB
-    # ...
+    for hardwareSet in request.json.values():
+        hardware_id = hardwareSet["hardware_id"]
+        project_id = hardwareSet["project_id"]
 
-    return f"{quantity} of resource {resource_id} checked in successfully!", 200
+        try:
+            projectResources = database.findProjectResources(project_id)
+
+            for resource in projectResources:
+                print("resource")
+                print(resource)
+                print(type(resource))
+                if resource["hardware_id"] == hardware_id:
+                    quantity = resource["checkedOut"] - hardwareSet["quantity"]
+                    break
+                else:
+                    quantity = hardwareSet["quantity"]
+        except:
+            quantity = hardwareSet["quantity"]
+
+        database.upsertResource(project_id, hardware_id, quantity)
+
+        # Update Availability of Hardware
+        hardware = database.findHardware(hardware_id)
+        newAvailable = hardware["availableAmount"] + hardwareSet["quantity"]
+        database.updateHardware(hardware_id, newAvailable)
+
+    return f"Hardware checked in successfully!", 200
+
+
+""" ------------------------ HARDWARE ROUTES ------------------------ """
+
+
+@app.route('/api/view_hardware', methods=['GET'])
+@jwt_required()
+def view_hardware():
+    try:
+        allHardware = database.findAllHardware()
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
+
+    return jsonify(allHardware), 200
 
 
 if __name__ == "__main__":
