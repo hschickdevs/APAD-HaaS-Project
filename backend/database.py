@@ -37,7 +37,10 @@ def addUser(username, password_hash):
 
 # PROJECTS DATABASE METHODS ---------------------------------------------------------
 def findProject(project_id):
-    return projects.find_one({'project_id': project_id}, {'_id': False})
+    project = projects.find_one({'project_id': project_id}, {'_id': False})
+    if project == None:
+        raise ValueError(f"Project ID {project_id} does not exist")
+    return project
 
 def addProject(project_id, username, projectName, projectDescription):
     project_dict = {
