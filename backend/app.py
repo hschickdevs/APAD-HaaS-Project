@@ -175,7 +175,7 @@ def request_resource():
         newAvailable = hardware["availableAmount"] - hardwareSet["quantity"]
         database.updateHardware(hardware_id, newAvailable)
 
-    return jsonify({f"Hardware checked out successfully!"}), 200
+    return jsonify({"msg": "Hardware checked out successfully!"}), 200
 
 
 @app.route('/api/check_in_resource', methods=['POST'])
@@ -205,9 +205,6 @@ def check_in_resource():
             projectResources = database.findProjectResources(project_id)
 
             for resource in projectResources:
-                print("resource")
-                print(resource)
-                print(type(resource))
                 if resource["hardware_id"] == hardware_id:
                     quantity = resource["checkedOut"] - hardwareSet["quantity"]
                     break
@@ -223,7 +220,7 @@ def check_in_resource():
         newAvailable = hardware["availableAmount"] + hardwareSet["quantity"]
         database.updateHardware(hardware_id, newAvailable)
 
-    return jsonify({f"Hardware checked in successfully!"}), 200
+    return jsonify({"msg": "Hardware checked in successfully!"}), 200
 
 
 """ ------------------------ HARDWARE ROUTES ------------------------ """
