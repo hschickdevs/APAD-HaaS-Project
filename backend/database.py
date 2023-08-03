@@ -49,10 +49,13 @@ def addProject(project_id, username, projectName, projectDescription):
         "projectName": projectName,
         "projectDescription": projectDescription
     }
-    if findProject(project_id) != None:
+    project = None
+    try:
+        project = findProject(project_id)
+    except:
+        projects.insert_one(project_dict)
+    if project != None:
         raise ValueError(f"Project ID {project_id} already exists")
-
-    projects.insert_one(project_dict)
     return project_dict
 
 
@@ -118,43 +121,3 @@ def updateHardware(hardware_id, availableAmount):
     }
     hardwares.update_one({"hardware_id": hardware_id}, {"$set": {"availableAmount": availableAmount}})
     return hardware_dict
-
-
-
-
-# ---------------------------------------------- TESTS ----------------------------------------------------------
-'''
-
-
-# def deleteUser(username): # Not needed
-#     users.delete_one({'username': username})
-
-
-import pymongo 
-
-class Database():
-    
-    @staticmethod
-    def init():
-        client = pymongo.MongoClient("mongodb+srv://ianjenatz:Group6-Password@group6.4bbohko.mongodb.net/?retryWrites=true&w=majority")
-        database  = client["project-database"]
-    
-    @staticmethod
-    def findDB(collection, payload):
-        object = database[collection].find_one(payload)
-        return object
-
-    @staticmethod
-    def addDB(collection, payload):
-        database[collection].insert_one(payload)
-    
-    @staticmethod
-    def updateDB(collection, payload):
-        database[collection].update_one() # Have to recheck Mongo Update vs Upsert
-
-    # Whatever Else Methods We Need
-
-
-
-
-'''

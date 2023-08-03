@@ -100,7 +100,6 @@ def create_project():
     except Exception as err:
         return jsonify({"msg": f"Error: {err}"}), 400
 
-    # Should return new project ID and data
     return jsonify({"msg": "Project created successfully!"}), 200
 
 
@@ -136,22 +135,6 @@ def view_resources():
 @app.route('/api/check_out_resource', methods=['POST'])
 @jwt_required()
 def request_resource():
-    '''
-        Frontend has to send in format:
-        {
-            "hardware1": {
-                "hardware_id": "hardware 1 Name or value",
-                "project_id": "1234",
-                "quantity": 1
-            },
-            "hardware2": {
-                "hardware_id": "hardware 2 Name or value",
-                "project_id": "1234",
-                "quantity": 2
-            }
-        }
-    '''
-
     for hardwareSet in request.json.values():
         hardware_id = hardwareSet["hardware_id"]
         project_id = hardwareSet["project_id"]
@@ -170,7 +153,6 @@ def request_resource():
 
         database.upsertResource(project_id, hardware_id, quantity)
 
-        # Update Availability of Hardware
         hardware = database.findHardware(hardware_id)
         newAvailable = hardware["availableAmount"] - hardwareSet["quantity"]
         database.updateHardware(hardware_id, newAvailable)
@@ -181,22 +163,6 @@ def request_resource():
 @app.route('/api/check_in_resource', methods=['POST'])
 @jwt_required()
 def check_in_resource():
-    '''
-        Frontend has to send in format:
-        {
-            "hardware1": {
-                "hardware_id": "hardware 1 Name or value",
-                "project_id": "1234",
-                "quantity": 1
-            },
-            "hardware2": {
-                "hardware_id": "hardware 2 Name or value",
-                "project_id": "1234",
-                "quantity": 2
-            }
-        }
-    '''
-
     for hardwareSet in request.json.values():
         hardware_id = hardwareSet["hardware_id"]
         project_id = hardwareSet["project_id"]
@@ -215,7 +181,6 @@ def check_in_resource():
 
         database.upsertResource(project_id, hardware_id, quantity)
 
-        # Update Availability of Hardware
         hardware = database.findHardware(hardware_id)
         newAvailable = hardware["availableAmount"] + hardwareSet["quantity"]
         database.updateHardware(hardware_id, newAvailable)
@@ -235,6 +200,9 @@ def view_hardware():
         return jsonify({"msg": f"Error: {err}"}), 400
 
     return jsonify(allHardware), 200
+
+
+""" ------------------------ MAIN ------------------------------------ """
 
 
 if __name__ == "__main__":
