@@ -40,7 +40,7 @@ function SignUp() {
             <div>
                 <Divider />
                 <div className="popupFooter" >
-                    <ButtonComponent className="popUpButton" variant="contained" id="signUpPopUpButton" label="Next" size="large" color="gray" onClick={onSignUpClick} />
+                    <ButtonComponent className="popUpButton" variant="contained" id="signUpPopUpButton" label="Next" size="large" color="primary" onClick={onSignUpClick} />
                 </div>
             </div>
         </React.Fragment>
