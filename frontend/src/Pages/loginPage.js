@@ -22,7 +22,11 @@ const LoginPage = (props) => {
     };
 
     const signUpClick = () => {
-        dispatch(setShowPopUp("signup"));
+        dispatch(setShowPopUp({
+            type: "signup",
+            message: "",
+            heading: ""
+        }));
     };
 
     const handlePassword = (e) => {
@@ -34,11 +38,19 @@ const LoginPage = (props) => {
     };
 
     const loginClick = () => {
-        const request = {
-            username: userId,
-            password: password
+        if (userId !== "" && password !== "") {
+            const request = {
+                username: userId,
+                password: password
+            }
+            getLogin(request, dispatch);
+        } else {
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "Please enter a valid username and password",
+                heading: "Login Failed!"
+            }))
         }
-        getLogin(request, dispatch);
 
     };
 
@@ -48,8 +60,9 @@ const LoginPage = (props) => {
                 heading="Login"
                 headingStyle="Login"
             >
-                <TextInputComponent label="User ID" id="userIdInput" fullWidth={true} required={true} onChange={handleUserId} />
-                <TextInputComponent label="Password" id="passwordInput" required={true} fullWidth={true} onChange={handlePassword} />
+                <div ></div>
+                <TextInputComponent label="Username" id="userIdInput" fullWidth={true} required={true} onChange={handleUserId} />
+                <TextInputComponent label="Password" type="password" id="passwordInput" required={true} fullWidth={true} onChange={handlePassword} />
                 <ButtonComponent variant="contained" id="loginButton" label="Next" size="large" colour="primary" containerStyle="right" onClick={loginClick} />
                 <div className="signupcontainer">
                     <p className="newUserContainer">New User? </p>

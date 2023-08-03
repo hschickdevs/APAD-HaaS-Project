@@ -62,6 +62,7 @@ const ButtonComponent = (props) => {
                             id={props.id}
                             color={props.color}
                             onClick={props.onClick}
+                            disabled={props.disabled}
                         >
                             {props.label}
                         </Button>
