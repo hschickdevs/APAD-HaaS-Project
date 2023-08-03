@@ -8,6 +8,8 @@ export const userSlice = createSlice({
         loginSuccess: false,
         projectId: "",
         error: "",
+        accessToken: "",
+        hardwareInfoArr: []
     },
     reducers: {
         setUserId: (state, action) => {
@@ -19,7 +21,12 @@ export const userSlice = createSlice({
         },
 
         setLoginSuccess: (state, action) => {
-            state.loginSuccess = action.payload
+            state.loginSuccess = action.payload.loginSuccess
+            state.userId = action.payload.username
+            state.password = action.payload.password
+            state.accessToken = action.payload.accessToken
+            state.hardwareInfoArr = action.payload.hardwareInfoArr
+            state.projectId = action.payload.projectId
         },
 
         setPassword: (state, action) => {
@@ -29,9 +36,13 @@ export const userSlice = createSlice({
         setError: (state, action) => {
             state.error = action.payload
         },
+
+        setHardwareInfoArr: (state, action) => {
+            state.hardwareInfoArr = action.payload
+        },
     },
 })
 
-export const { setUserId, setLoginSuccess, setProjectId, setPassword, setError } = userSlice.actions
+export const { setUserId, setLoginSuccess, setProjectId, setPassword, setError, setHardwareInfoArr } = userSlice.actions
 
 export default userSlice.reducer
