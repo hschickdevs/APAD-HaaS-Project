@@ -51,7 +51,6 @@ def home():
         }})
 
 
-
 """ ------------------------ AUTHORIZATION ROUTES ------------------------ """
 
 
@@ -95,63 +94,147 @@ def login():
 @app.route('/api/create_project', methods=['POST'])
 @jwt_required()
 def create_project():
-    # Implement project creation logic here
     try:
-        database.addProject(request.json["project_id"], request.json["username"], request.json["projectName"], request.json["projectDescription"])
+        database.addProject(request.json["project_id"], request.json["username"],
+                            request.json["projectName"], request.json["projectDescription"])
     except Exception as err:
         return jsonify({"msg": f"Error: {err}"}), 400
 
-    return "Project created successfully!", 200  # Should return new project ID and data
+    # Should return new project ID and data
+    return jsonify({"msg": "Project created successfully!"}), 200
 
 
-@app.route('/api/access_project', methods=['GET'])
+@app.route('/api/access_project', methods=['POST'])
 @jwt_required()
 def access_project():
-    project_id = request.json["project_id"]
+    project_id = request.json.get("project_id", None)
 
-    # Implement project access logic here
     try:
         project = database.findProject(project_id)
     except Exception as err:
         return jsonify({"msg": f"Error: {err}"}), 400
-    
+
     return jsonify(project), 200
 
 
 """ ------------------------ RESOURCE ROUTES ------------------------ """
 
 
-@app.route('/api/view_resources', methods=['GET'])
+@app.route('/api/view_resources', methods=['POST'])
 @jwt_required()
 def view_resources():
-    # Implement resource viewing logic here
-    return "Viewing all resources", 200
+    project_id = request.json.get('project_id', None)
+
+    try:
+        projectResources = database.findProjectResources(project_id)
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
+
+    return jsonify(projectResources), 200
 
 
 @app.route('/api/check_out_resource', methods=['POST'])
 @jwt_required()
 def request_resource():
-    resource_id = request.json["resource_id"]
-    project_id = request.json["project_id"]
-    quantity = request.json["quantity"]
+    '''
+        Frontend has to send in format:
+        {
+            "hardware1": {
+                "hardware_id": "hardware 1 Name or value",
+                "project_id": "1234",
+                "quantity": 1
+            },
+            "hardware2": {
+                "hardware_id": "hardware 2 Name or value",
+                "project_id": "1234",
+                "quantity": 2
+            }
+        }
+    '''
 
-    # Implement resource request logic here with MongoDB
-    # ...
+    for hardwareSet in request.json.values():
+        hardware_id = hardwareSet["hardware_id"]
+        project_id = hardwareSet["project_id"]
 
-    return f"{quantity} of resource {resource_id} checked out successfully!", 200
+        try:
+            projectResources = database.findProjectResources(project_id)
+
+            for resource in projectResources:
+                if resource["hardware_id"] == hardware_id:
+                    quantity = resource["checkedOut"] + hardwareSet["quantity"]
+                    break
+                else:
+                    quantity = hardwareSet["quantity"]
+        except:
+            quantity = hardwareSet["quantity"]
+
+        database.upsertResource(project_id, hardware_id, quantity)
+
+        # Update Availability of Hardware
+        hardware = database.findHardware(hardware_id)
+        newAvailable = hardware["availableAmount"] - hardwareSet["quantity"]
+        database.updateHardware(hardware_id, newAvailable)
+
+    return jsonify({"msg": "Hardware checked out successfully!"}), 200
 
 
 @app.route('/api/check_in_resource', methods=['POST'])
 @jwt_required()
 def check_in_resource():
-    resource_id = request.json["resource_id"]
-    project_id = request.json["project_id"]
-    quantity = request.json["quantity"]
+    '''
+        Frontend has to send in format:
+        {
+            "hardware1": {
+                "hardware_id": "hardware 1 Name or value",
+                "project_id": "1234",
+                "quantity": 1
+            },
+            "hardware2": {
+                "hardware_id": "hardware 2 Name or value",
+                "project_id": "1234",
+                "quantity": 2
+            }
+        }
+    '''
 
-    # Implement resource check-in logic here with MongoDB
-    # ...
+    for hardwareSet in request.json.values():
+        hardware_id = hardwareSet["hardware_id"]
+        project_id = hardwareSet["project_id"]
 
-    return f"{quantity} of resource {resource_id} checked in successfully!", 200
+        try:
+            projectResources = database.findProjectResources(project_id)
+
+            for resource in projectResources:
+                if resource["hardware_id"] == hardware_id:
+                    quantity = resource["checkedOut"] - hardwareSet["quantity"]
+                    break
+                else:
+                    quantity = hardwareSet["quantity"]
+        except:
+            quantity = hardwareSet["quantity"]
+
+        database.upsertResource(project_id, hardware_id, quantity)
+
+        # Update Availability of Hardware
+        hardware = database.findHardware(hardware_id)
+        newAvailable = hardware["availableAmount"] + hardwareSet["quantity"]
+        database.updateHardware(hardware_id, newAvailable)
+
+    return jsonify({"msg": "Hardware checked in successfully!"}), 200
+
+
+""" ------------------------ HARDWARE ROUTES ------------------------ """
+
+
+@app.route('/api/view_hardware', methods=['GET'])
+@jwt_required()
+def view_hardware():
+    try:
+        allHardware = database.findAllHardware()
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
+
+    return jsonify(allHardware), 200
 
 
 if __name__ == "__main__":

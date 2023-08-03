@@ -13,11 +13,12 @@ The combined system provides a robust platform for managing theoretical hardware
 
 ## Latest Deployments:
 
-* **Frontend**: https://vercel.com/hschickdevs/apad-project-frontend
-    - URL: https://apad-project-frontend.vercel.app
-* **Backend:** https://dashboard.heroku.com/apps/apad-project-backend
-    - URL: https://apad-project-backend-22fdec946e0a.herokuapp.com/
-
+* **Frontend Project**: https://vercel.com/hschickdevs/apad-project-frontend
+    - Site URL: https://apad-project-frontend.vercel.app
+* **Backend Project:** https://dashboard.heroku.com/apps/apad-project-backend
+    - Backend Endpoint: https://apad-project-backend-22fdec946e0a.herokuapp.com/
+* **MongoDB Atlas DB:** https://cloud.mongodb.com/v2/64b732579ef0cd4b589d5bef#/metrics/replicaSet/64b9a9da44cff528a871be85/explorer/project-database
+    
 ## Backend Deployment Instructions:
 
 1. Create a new app on Heroku
