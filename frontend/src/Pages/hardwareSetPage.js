@@ -14,6 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextInputComponent from '../Components/textInput';
 import { checkInAPI, checkOutAPI } from '../app/API';
+import { setShowPopUp } from '../app/appSlice';
 
 const headCells = [
     {
@@ -42,7 +43,6 @@ function HardwareSetPage() {
     const [noOfHardwareSet, setNoOfHardwareSet] = useState(0);
     const [hardwareState, setHardwareState] = useState({});
     const [hardwareData, setHardwareData] = useState([]);
-    const [errorId, setErrorId] = useState("");
 
     useEffect(() => {
         if (hardwareInfoArr !== null && hardwareInfoArr !== undefined && hardwareInfoArr.length !== 0) {
@@ -56,22 +56,44 @@ function HardwareSetPage() {
             ...hardwareState,
             [row.hardware_id]: e.target.value
         })
-        inputValidation(row.hardware_id, e.target.value, index)
     };
 
-    const inputValidation = (hardwareId, value, index) => {
-        if (Number(value) < 0 || Number(value) > hardwareData[index].availableAmount || Number(value) > hardwareData[index].maxAmount) {
-            setErrorId(hardwareId)
-        } else {
-            setErrorId("")
+    const checkInValidation = () => {
+        const error = [];
+        if (noOfHardwareSet !== 0) {
+            hardwareData.forEach((hardware) => {
+                const value = isNaN(Number(hardwareState[hardware.hardware_id])) ? 0 : Number(hardwareState[hardware.hardware_id]);
+                const checkInAvailable = hardware.maxAmount - hardware.availableAmount
+                if (value < 0) {
+                    error.push(hardware.hardware_id)
+                } else if (value > checkInAvailable) {
+                    error.push(hardware.hardware_id)
+                }
+            })
         }
-    }
+        return error
+    };
+
+    const checkOutValidation = () => {
+        const error = [];
+        if (noOfHardwareSet !== 0) {
+            hardwareData.forEach((hardware) => {
+                const value = isNaN(Number(hardwareState[hardware.hardware_id])) ? 0 : Number(hardwareState[hardware.hardware_id]);
+                const availableUnits = hardware.availableAmount
+                if (value < 0) {
+                    error.push(hardware.hardware_id)
+                } else if (value > availableUnits) {
+                    error.push(hardware.hardware_id)
+                }
+            })
+        }
+        return error
+    };
 
     const createRequest = () => {
         let request = {};
         if (noOfHardwareSet !== 0) {
             hardwareData.forEach((hardware) => {
-                console.log("num", Number(hardwareState[hardware.hardware_id]), hardwareState[hardware.hardware_id], hardwareState, hardware)
                 request[hardware.hardware_id] = {};
                 request[hardware.hardware_id].hardware_id = hardware.hardware_id;
                 request[hardware.hardware_id].project_id = projectId;
@@ -82,15 +104,36 @@ function HardwareSetPage() {
     };
 
     const checkInAmount = () => {
-        let request = createRequest();
-        checkInAPI(request, projectId, dispatch, accessToken)
-        setHardwareState({})
+        const errorArr = checkInValidation()
+        if (errorArr.length !== 0) {
+            let errString = errorArr.join(", ")
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "Please enter a valid request for the following: " + errString,
+                heading: "Invalid Request!"
+            }))
+        } else {
+            let request = createRequest("checkIn");
+            checkInAPI(request, projectId, dispatch, accessToken)
+            setHardwareState({})
+        }
     };
 
     const checkOutAmount = () => {
-        let request = createRequest();
-        checkOutAPI(request, projectId, dispatch, accessToken)
-        setHardwareState({})
+        const errorArr = checkOutValidation()
+        if (errorArr.length !== 0) {
+            let errString = errorArr.join(", ")
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "Please enter a valid request for the following: " + errString,
+                heading: "Invalid Request!"
+            }))
+        } else {
+            let request = createRequest();
+            console.log(request)
+            checkOutAPI(request, projectId, dispatch, accessToken)
+            setHardwareState({})
+        }
     };
 
     const backButtonClick = () => {
@@ -182,7 +225,6 @@ function HardwareSetPage() {
                                                                 fontWeight: "normal"
                                                             }} align="center">
                                                                 <TextInputComponent
-                                                                    errorId={errorId !== "" ? errorId : null}
                                                                     id={row.hardware_id}
                                                                     onChange={(e) => { setRequestAmountForHardware(e, row, index) }}
                                                                     type='number'
@@ -211,8 +253,8 @@ function HardwareSetPage() {
                         </Box>
                     </div>
                     <div className='hardwareFooter'>
-                        <ButtonComponent className="checkInButton" variant="contained" id="checkInButton" label="Check In" size="large" color="gray" onClick={checkInAmount} disabled={errorId !== "" ? true : false} />
-                        <ButtonComponent className="checkOutButton" variant="contained" id="checkOutButton" label="Check Out" size="large" color="gray" onClick={checkOutAmount} disabled={errorId !== "" ? true : false} />
+                        <ButtonComponent className="checkInButton" variant="contained" id="checkInButton" label="Check In" size="large" color="gray" onClick={checkInAmount} />
+                        <ButtonComponent className="checkOutButton" variant="contained" id="checkOutButton" label="Check Out" size="large" color="gray" onClick={checkOutAmount} />
                     </div>
                 </div>
             </React.Fragment >
