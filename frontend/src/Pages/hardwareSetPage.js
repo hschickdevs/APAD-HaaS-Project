@@ -116,6 +116,7 @@ function HardwareSetPage() {
             let request = createRequest("checkIn");
             checkInAPI(request, projectId, dispatch, accessToken)
             setHardwareState({})
+            document.querySelectorAll('input').forEach(singleInput => singleInput.value = '');
         }
     };
 
@@ -130,9 +131,9 @@ function HardwareSetPage() {
             }))
         } else {
             let request = createRequest();
-            console.log(request)
             checkOutAPI(request, projectId, dispatch, accessToken)
             setHardwareState({})
+            document.querySelectorAll('input').forEach(singleInput => singleInput.value = '');
         }
     };
 
