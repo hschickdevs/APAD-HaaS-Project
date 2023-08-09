@@ -39,10 +39,10 @@ const ProjectComponent = () => {
                 request.username = userName;
                 request.projectName = projectName;
                 request.projectDescription = projectDescription;
-                createProjectAPI(request, dispatch, accessToken)
+                createProjectAPI(request, dispatch, accessToken);
             } else if (type === "existing") {
                 request.project_id = projectId;
-                existingProjectAPI(request, dispatch, accessToken)
+                existingProjectAPI(request, dispatch, accessToken);
             }
         } else {
             dispatch(setShowPopUp({
