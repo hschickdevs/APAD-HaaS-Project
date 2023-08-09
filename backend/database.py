@@ -58,6 +58,11 @@ def addProject(project_id, username, projectName, projectDescription):
         raise ValueError(f"Project ID {project_id} already exists")
     return project_dict
 
+def deleteProject(project_id):
+    project = findProject(project_id)
+    projects.delete_one(project)
+    return project
+
 
 # RESOURCES DATABASE METHODS ---------------------------------------------------------
 def findResource(checkedOut_id):

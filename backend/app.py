@@ -116,6 +116,19 @@ def access_project():
     return jsonify(project), 200
 
 
+@app.route('/api/delete_project', methods=['POST'])
+@jwt_required()
+def delete_project():
+    project_id = request.json.get("project_id", None)
+
+    try:
+        database.deleteProject(project_id)
+    except Exception as err:
+        return jsonify({"msg": f"Error: {err}"}), 400
+
+    return jsonify({"msg": "Project deleted successfully!"}), 200
+
+
 """ ------------------------ RESOURCE ROUTES ------------------------ """
 
 
