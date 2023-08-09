@@ -3,6 +3,7 @@ import ButtonComponent from '../Components/button';
 import backImg from "../media/backIcon.svg";
 import { useDispatch, useSelector } from 'react-redux';
 import "../CSS/hardwareSetPage.css"
+import { setShowPopUp } from '../app/appSlice';
 import { setHardwareInfoArr, setLoginSuccess, setProjectId } from '../app/userSlice';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -14,6 +15,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextInputComponent from '../Components/textInput';
 import { checkInAPI, checkOutAPI } from '../app/API';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const headCells = [
     {
@@ -93,6 +95,28 @@ function HardwareSetPage() {
         setHardwareState({})
     };
 
+    const deleteHardware = (hardwareId) => {
+        // /api/delete_project
+        // Needs "project_id" key in data and bearer token in header
+
+        // CHECK ENSURE THAT NO RESOURCES ARE CHECKED OUT STILL BY THIS PROJECT:
+        // if ( CONDITION ) {
+        //     dispatch(setShowPopUp({
+        //         type: "error",
+        //         message: "Please check in all resources before deleting this project!",
+        //         heading: "Resources still checked out"
+        //     }))
+        //     return;
+        // }
+
+
+        // THEN DELETE THE PROJECT FROM THE API:
+        // deleteProjectAPI(projectId, dispatch, accessToken);
+
+        // THEN GO BACK TO THE PROJECTS PAGE:
+        // backButtonClick();
+    };
+
     const backButtonClick = () => {
         setHardwareData([]);
         setNoOfHardwareSet(0)
@@ -118,8 +142,9 @@ function HardwareSetPage() {
                             }} />
                     </div>
                     <div className='hardwareHeader'>
-                        <img src={backImg} alt="Back Button" style={{ width: "40px", height: "30px", marginTop: "25px", marginLeft: "10px" }} onClick={() => { backButtonClick() }} />
+                        <img src={backImg} alt="Back Button" style={{ width: "40px", height: "30px", marginLeft: "10px" }} onClick={() => { backButtonClick() }} />
                         <h3 style={{ marginLeft: "20px", fontSize: "25px" }} >Project ID: {projectId}</h3>
+                        <div class="hardwareDelete"><DeleteIcon style={{ cursor: "pointer" }} onClick={deleteHardware}/></div>
                     </div>
                     <div className='hardwareContent'>
                         <Box sx={{ width: '100%' }}>
