@@ -16,7 +16,6 @@ import Paper from '@mui/material/Paper';
 import TextInputComponent from '../Components/textInput';
 import { checkInAPI, checkOutAPI } from '../app/API';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { setShowPopUp } from '../app/appSlice';
 
 const headCells = [
     {
