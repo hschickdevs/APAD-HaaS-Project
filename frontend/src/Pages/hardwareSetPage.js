@@ -143,21 +143,14 @@ function HardwareSetPage() {
         // Needs "project_id" key in data and bearer token in header
 
         // CHECK ENSURE THAT NO RESOURCES ARE CHECKED OUT STILL BY THIS PROJECT:
-        // if ( CONDITION ) {
-        //     dispatch(setShowPopUp({
-        //         type: "error",
-        //         message: "Please check in all resources before deleting this project!",
-        //         heading: "Resources still checked out"
-        //     }))
-        //     return;
-        // }
-
+        // ...
 
         // THEN DELETE THE PROJECT FROM THE API:
-        // deleteProjectAPI(projectId, dispatch, accessToken);
+        // ...
 
         // THEN GO BACK TO THE PROJECTS PAGE:
         // backButtonClick();
+        return;  // Placeholder
     };
 
     const backButtonClick = () => {

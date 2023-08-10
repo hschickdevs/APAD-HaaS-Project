@@ -28,6 +28,9 @@ const getApiURL = (type) => {
         case "checkOut":
             URL += "/check_out_resource"
             break;
+        case "deleteProject":
+            URL += "/delete_project"
+            break;
         default:
             break;
     }
