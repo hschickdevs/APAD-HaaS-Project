@@ -70,8 +70,11 @@ def findResource(checkedOut_id):
 
 def findProjectResources(project_id):
     allResources = list(resources.find({"project_id": project_id}, {'_id': False}))
-    if len(allResources) == 0:
-        raise ValueError("No resources found")
+    
+    # Commented out because this is not an error, just an empty list
+    # if len(allResources) == 0: 
+    #     raise ValueError("No resources found")
+    
     return allResources
 
 def upsertResource(project_id, hardware_id, checkedOut):
