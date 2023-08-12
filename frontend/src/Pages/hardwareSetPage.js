@@ -138,7 +138,7 @@ function HardwareSetPage() {
         }
     };
 
-    const deleteHardware = (hardwareId) => {
+    const deleteProject = (projectId) => {
         // /api/delete_project
         // Needs "project_id" key in data and bearer token in header
 
@@ -180,7 +180,7 @@ function HardwareSetPage() {
                     <div className='hardwareHeader'>
                         <img src={backImg} alt="Back Button" style={{ width: "40px", height: "30px", marginLeft: "10px" }} onClick={() => { backButtonClick() }} />
                         <h3 style={{ marginLeft: "20px", fontSize: "25px" }} >Project ID: {projectId}</h3>
-                        <div class="hardwareDelete"><DeleteIcon style={{ cursor: "pointer" }} onClick={deleteHardware}/></div>
+                        <div class="hardwareDelete"><DeleteIcon style={{ cursor: "pointer" }} onClick={deleteProject}/></div>
                     </div>
                     <div className='hardwareContent'>
                         <Box sx={{ width: '100%' }}>
