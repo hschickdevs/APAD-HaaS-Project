@@ -58,6 +58,11 @@ def addProject(project_id, username, projectName, projectDescription):
         raise ValueError(f"Project ID {project_id} already exists")
     return project_dict
 
+def deleteProject(project_id):
+    project = findProject(project_id)
+    projects.delete_one(project)
+    return project
+
 
 # RESOURCES DATABASE METHODS ---------------------------------------------------------
 def findResource(checkedOut_id):
@@ -65,8 +70,11 @@ def findResource(checkedOut_id):
 
 def findProjectResources(project_id):
     allResources = list(resources.find({"project_id": project_id}, {'_id': False}))
-    if len(allResources) == 0:
-        raise ValueError("No resources found")
+    
+    # Commented out because this is not an error, just an empty list
+    # if len(allResources) == 0: 
+    #     raise ValueError("No resources found")
+    
     return allResources
 
 def upsertResource(project_id, hardware_id, checkedOut):

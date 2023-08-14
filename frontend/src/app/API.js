@@ -1,8 +1,15 @@
 import { setShowPopUp } from "./appSlice";
-import { setHardwareInfoArr, setLoginSuccess, setProjectId } from "./userSlice";
+import { setHardwareInfoArr, setProjectResourcesArr, setLoginSuccess, setProjectId } from "./userSlice";
 
 const getApiURL = (type) => {
-    let URL = "https://apad-project-backend-22fdec946e0a.herokuapp.com/api";
+    if (process.env.NODE_ENV === 'development') {
+        // For local testing
+        URL = "http://127.0.0.1:5000/api";
+    } else {
+        // For production
+        URL = "https://apad-project-backend-22fdec946e0a.herokuapp.com/api";
+    }
+
     switch (type) {
         case "login":
             URL += "/login";
@@ -27,6 +34,9 @@ const getApiURL = (type) => {
             break;
         case "checkOut":
             URL += "/check_out_resource"
+            break;
+        case "deleteProject":
+            URL += "/delete_project"
             break;
         default:
             break;
@@ -178,6 +188,39 @@ export async function existingProjectAPI(request, dispatch, accessToken) {
     }
 }
 
+export async function deleteProjectAPI(request, dispatch, accessToken) {
+    let status = 0; // Need success status for reroute to projects page
+    try {
+        let response = await getAPIResponse("deleteProject", request, accessToken)
+        if (response && response.msg && response.msg === "Project deleted successfully!") {
+            dispatch(setShowPopUp({
+                type: "success",
+                message: `Project "${request.project_id}" has been deleted.`,
+                heading: "Project Deletion Successful!"
+            }
+            ))
+            status = 1;
+        } else if (response && response.msg === "Token has expired") {
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "User session expired, Please Login again!",
+                heading: "Session expired!"
+            }
+            ))
+        } else {
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "Something went wrong while deleting the project, Please try again!",
+                heading: "Check Out Failed!"
+            }
+            ))
+        }
+    } catch (error) {
+        console.log("error in deleteProjectAPI", error)
+    }
+    return status;
+}
+
 export async function getHardwareAPI(dispatch, accessToken) {
     try {
         let response = await getAPIResponse("getHardware", {}, accessToken);
@@ -203,6 +246,31 @@ export async function getHardwareAPI(dispatch, accessToken) {
     }
 }
 
+export async function getResourcesAPI(request, dispatch, accessToken) {
+    try {
+        let response = await getAPIResponse("getResources", request, accessToken)
+        if (response && !response.msg) {  // Modified to accept an empty list
+            dispatch(setProjectResourcesArr(response));
+        } else if (response && response.msg === "Token has expired") {
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "User session expired, Please Login again!",
+                heading: "Session expired!"
+            }
+            ))
+        } else {
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "Something went wrong while fetching the project hardware resource details, Please try again!",
+                heading: "Project Hardware Resource Info Fetch Failed!"
+            }
+            ))
+        }
+    } catch (error) {
+        console.log("error in getResourcesAPI", error)
+    }
+}
+
 export async function checkInAPI(request, projectId, dispatch, accessToken) {
     try {
         let response = await getAPIResponse("checkIn", request, accessToken)
@@ -214,6 +282,7 @@ export async function checkInAPI(request, projectId, dispatch, accessToken) {
             }
             ))
             existingProjectAPI({ "project_id": projectId }, dispatch, accessToken);
+            getResourcesAPI({ "project_id": projectId }, dispatch, accessToken);
         } else if (response && response.msg === "Token has expired") {
             dispatch(setShowPopUp({
                 type: "error",
@@ -245,6 +314,7 @@ export async function checkOutAPI(request, projectId, dispatch, accessToken) {
             }
             ))
             existingProjectAPI({ "project_id": projectId }, dispatch, accessToken);
+            getResourcesAPI({ "project_id": projectId }, dispatch, accessToken);
         } else if (response && response.msg === "Token has expired") {
             dispatch(setShowPopUp({
                 type: "error",
@@ -262,13 +332,5 @@ export async function checkOutAPI(request, projectId, dispatch, accessToken) {
         }
     } catch (error) {
         console.log("error in checkOutAPI", error)
-    }
-}
-
-export async function getResourcesAPI(request, dispatch, accessToken) {
-    try {
-        let response = await getAPIResponse("getResources", request, accessToken);
-    } catch (error) {
-        console.log("error in getResourcesAPI", error)
     }
 }

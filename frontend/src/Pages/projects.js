@@ -8,7 +8,7 @@ import createProjectImg from "../media/createProject.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoginSuccess } from '../app/userSlice';
 import { setShowPopUp } from '../app/appSlice';
-import { createProjectAPI, existingProjectAPI } from '../app/API';
+import { createProjectAPI, existingProjectAPI, getResourcesAPI } from '../app/API';
 
 const ProjectComponent = () => {
 
@@ -40,9 +40,11 @@ const ProjectComponent = () => {
                 request.projectName = projectName;
                 request.projectDescription = projectDescription;
                 createProjectAPI(request, dispatch, accessToken);
+                getResourcesAPI({"project_id": projectId}, dispatch, accessToken)
             } else if (type === "existing") {
                 request.project_id = projectId;
                 existingProjectAPI(request, dispatch, accessToken);
+                getResourcesAPI({"project_id": projectId}, dispatch, accessToken)
             }
         } else {
             dispatch(setShowPopUp({

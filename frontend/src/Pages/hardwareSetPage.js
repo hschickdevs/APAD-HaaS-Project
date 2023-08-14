@@ -3,7 +3,8 @@ import ButtonComponent from '../Components/button';
 import backImg from "../media/backIcon.svg";
 import { useDispatch, useSelector } from 'react-redux';
 import "../CSS/hardwareSetPage.css"
-import { setHardwareInfoArr, setLoginSuccess, setProjectId } from '../app/userSlice';
+import { setShowPopUp } from '../app/appSlice';
+import { setHardwareInfoArr, setProjectResourcesArr, setLoginSuccess, setProjectId } from '../app/userSlice';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,8 +14,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextInputComponent from '../Components/textInput';
-import { checkInAPI, checkOutAPI } from '../app/API';
-import { setShowPopUp } from '../app/appSlice';
+import { checkInAPI, checkOutAPI, deleteProjectAPI } from '../app/API';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const headCells = [
     {
@@ -40,22 +41,46 @@ function HardwareSetPage() {
     const projectId = useSelector((state) => state.user.projectId);
     const accessToken = useSelector((state) => state.user.accessToken);
     const hardwareInfoArr = useSelector((state) => state.user.hardwareInfoArr);
+    const projectResourcesArr = useSelector((state) => state.user.projectResourcesArr);
     const [noOfHardwareSet, setNoOfHardwareSet] = useState(0);
     const [hardwareState, setHardwareState] = useState({});
     const [hardwareData, setHardwareData] = useState([]);
+    const [noOfProjectResources, setNoOfProjectResources] = useState(0);
+    const [projectResourceData, setProjectResourceData] = useState([]);
 
     useEffect(() => {
         if (hardwareInfoArr !== null && hardwareInfoArr !== undefined && hardwareInfoArr.length !== 0) {
             setHardwareData(hardwareInfoArr);
             setNoOfHardwareSet(hardwareInfoArr.length);
         }
-    }, [hardwareInfoArr, projectId])
+        if (projectResourcesArr !== null && projectResourcesArr !== undefined && projectResourcesArr.length !== 0) {
+            setProjectResourceData(projectResourcesArr);
+            setNoOfProjectResources(projectResourcesArr.length);
+        }
+    }, [hardwareInfoArr, projectResourcesArr, projectId])
 
     const setRequestAmountForHardware = (e, row, index) => {
         setHardwareState({
             ...hardwareState,
             [row.hardware_id]: e.target.value
         })
+    };
+
+    const deleteProjectValidation = () => {
+        const error = [];
+        // if (noOfProjectResources !== 0) {  // Commented out to accept an empty list when no resources have been checked out
+        console.log(projectResourceData)
+        projectResourceData.forEach((projectResource) => {
+            const checkedOut = projectResource.checkedOut
+            if (checkedOut > 0) {
+                error.push(`${checkedOut} resources still checked out for ${projectResource.hardware_id}`)
+            }
+        })
+        // } else {
+        //     error.push("No hardware sets available for this project")
+        // }
+        console.log("Errors: " + error)
+        return error
     };
 
     const checkInValidation = () => {
@@ -137,11 +162,34 @@ function HardwareSetPage() {
         }
     };
 
+    const deleteProject = () => {
+        // CHECK ENSURE THAT NO HARDWARE RESOURCES ARE CHECKED OUT STILL BY THIS PROJECT:
+        const errorArr = deleteProjectValidation()
+
+        // THEN DELETE THE PROJECT FROM THE API IF VALIDATION IS SUCCESSFUL:
+        if (errorArr.length !== 0) {
+            let errString = errorArr.join(", ")
+            dispatch(setShowPopUp({
+                type: "error",
+                message: "Cannot delete project: " + errString,
+                heading: "Invalid Request!"
+            }))
+        } else {
+            // DELETE PROJECT API CALL, THEN CALL backButtonClick() IF SUCCESSFUL:
+            deleteProjectAPI({"project_id": projectId}, dispatch, accessToken).then((success) => {
+                if (success === 1) {
+                    backButtonClick()
+                }
+            })
+        }
+    };
+
     const backButtonClick = () => {
         setHardwareData([]);
         setNoOfHardwareSet(0)
         dispatch(setProjectId(""));
         dispatch(setHardwareInfoArr([]));
+        dispatch(setProjectResourcesArr([]));
     };
 
     return (
@@ -157,13 +205,15 @@ function HardwareSetPage() {
                                     password: "",
                                     accessToken: "",
                                     hardwareInfoArr: [],
+                                    projectResourcesArr: [],
                                     projectId: ""
                                 }));
                             }} />
                     </div>
                     <div className='hardwareHeader'>
-                        <img src={backImg} alt="Back Button" style={{ width: "40px", height: "30px", marginTop: "25px", marginLeft: "10px" }} onClick={() => { backButtonClick() }} />
+                        <img src={backImg} alt="Back Button" style={{ width: "40px", height: "30px", marginLeft: "10px" }} onClick={() => { backButtonClick() }} />
                         <h3 style={{ marginLeft: "20px", fontSize: "25px" }} >Project ID: {projectId}</h3>
+                        <div class="hardwareDelete"><DeleteIcon style={{ cursor: "pointer" }} onClick={deleteProject}/></div>
                     </div>
                     <div className='hardwareContent'>
                         <Box sx={{ width: '100%' }}>

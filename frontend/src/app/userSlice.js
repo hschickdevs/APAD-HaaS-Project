@@ -40,9 +40,13 @@ export const userSlice = createSlice({
         setHardwareInfoArr: (state, action) => {
             state.hardwareInfoArr = action.payload
         },
+
+        setProjectResourcesArr: (state, action) => {
+            state.projectResourcesArr = action.payload
+        }
     },
 })
 
-export const { setUserId, setLoginSuccess, setProjectId, setPassword, setError, setHardwareInfoArr } = userSlice.actions
+export const { setUserId, setLoginSuccess, setProjectId, setPassword, setError, setHardwareInfoArr, setProjectResourcesArr } = userSlice.actions
 
 export default userSlice.reducer
