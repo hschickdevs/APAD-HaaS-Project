@@ -48,7 +48,7 @@ This team project, in our Advanced Programming &amp; App Development (APAD) clas
 
 * The backend, a RESTful API, allows for account management, project creation and access, and resource viewing, requesting, and management. It is developed using Flask and MongoDB, with secure routes protected by JSON Web Tokens (JWT).
 
-* The frontend is built with React and styled with Material-UI. This frontend communicates with the backend API to provide users with an intuitive interface for managing their hardware resources.
+* The frontend is built with React, Redux and styled with Material-UI. This frontend communicates with the backend API to provide users with an intuitive interface for managing their hardware resources.
 
 The combined system provides a robust platform for managing theoretical hardware resources in a shared environment, with a focus on security, usability, and efficiency.
 
